@@ -1,0 +1,151 @@
+        <!-- ========== DASHBOARD ========== -->
+        <div class="aba-painel active" id="painel-dashboard">
+
+          <!-- Top Bar: Logo + Project -->
+          <div class="cartao" style="display:flex;align-items:center;justify-content:space-between;padding:.75rem 1.25rem;margin-bottom:1rem;">
+            <div style="display:flex;align-items:center;gap:.75rem;">
+              <div style="width:36px;height:36px;background:#0a1628;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+              </div>
+              <div>
+                <div style="font-size:1rem;font-weight:800;letter-spacing:2px;color:var(--text-1);">GR PESQUISAS</div>
+                <div style="font-size:.65rem;color:var(--text-2);"><span style="color:#22c55e;">🟢</span> Projeto: ELEIÇÕES CEARÁ 2026</div>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:1rem;">
+              <span style="font-size:.7rem;color:var(--text-2);">🔔 Notificações</span>
+              <span style="font-size:.7rem;color:var(--text-2);">👤 <span id="nomeUsuarioTopo">Usuário</span></span>
+              <span style="font-size:.7rem;color:var(--text-2);">⚙</span>
+              <span style="font-size:.65rem;color:var(--text-3);">Última Atualização: <span id="dashClock">--:--:--</span></span>
+            </div>
+          </div>
+
+          <!-- KPI Cards -->
+          <div style="display:grid;grid-template-columns:repeat(6,1fr);gap:.75rem;margin-bottom:1rem;">
+            <div class="cartao" style="text-align:center;padding:.75rem .5rem;">
+              <div style="font-size:.65rem;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:.5px;">Entrevistas</div>
+              <div style="font-size:1.6rem;font-weight:800;color:var(--text-1);" id="kv-total">0</div>
+              <div style="font-size:.6rem;color:var(--text-3);">Meta: <span id="kpi-meta">2.500</span></div>
+            </div>
+            <div class="cartao" style="text-align:center;padding:.75rem .5rem;">
+              <div style="font-size:.65rem;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:.5px;">Meta Dia</div>
+              <div style="font-size:1.6rem;font-weight:800;color:var(--cyan-500);" id="kv-meta-dia">0%</div>
+              <div style="font-size:.6rem;color:var(--text-3);">Hoje</div>
+            </div>
+            <div class="cartao" style="text-align:center;padding:.75rem .5rem;">
+              <div style="font-size:.65rem;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:.5px;">Municípios</div>
+              <div style="font-size:1.6rem;font-weight:800;color:var(--text-1);" id="kv-municipios">0</div>
+              <div style="font-size:.6rem;color:var(--text-3);">Cobertos</div>
+            </div>
+            <div class="cartao" style="text-align:center;padding:.75rem .5rem;">
+              <div style="font-size:.65rem;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:.5px;">Bairros</div>
+              <div style="font-size:1.6rem;font-weight:800;color:var(--text-1);" id="kv-bairros">0</div>
+              <div style="font-size:.6rem;color:var(--text-3);">Amostrados</div>
+            </div>
+            <div class="cartao" style="text-align:center;padding:.75rem .5rem;">
+              <div style="font-size:.65rem;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:.5px;">Pesq. Online</div>
+              <div style="font-size:1.6rem;font-weight:800;color:#22c55e;" id="kv-ativos">0</div>
+              <div style="font-size:.6rem;color:var(--text-3);">Em campo</div>
+            </div>
+            <div class="cartao" style="text-align:center;padding:.75rem .5rem;">
+              <div style="font-size:.65rem;font-weight:600;color:var(--text-2);text-transform:uppercase;letter-spacing:.5px;">Projetos</div>
+              <div style="font-size:1.6rem;font-weight:800;color:var(--yellow-400);">6</div>
+              <div style="font-size:.6rem;color:var(--text-3);">Ativos</div>
+            </div>
+          </div>
+
+          <!-- Row 1: Intenção de Voto + Rejeição -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+            <div class="cartao">
+              <div class="cabecalho-cartao">
+                <div class="titulo-cartao" style="font-size:.8rem;">INTENÇÃO DE VOTO - PREFEITO</div>
+                <span class="badge badge-cyan">Estimulada</span>
+              </div>
+              <div id="dash-voto-estimulada"></div>
+            </div>
+            <div class="cartao">
+              <div class="cabecalho-cartao">
+                <div class="titulo-cartao" style="font-size:.8rem;">REJEIÇÃO</div>
+                <span class="badge badge-red">Múltipla</span>
+              </div>
+              <div id="dash-rejeicao"></div>
+              <div id="dash-nao-rejeita" style="margin-top:.25rem;"></div>
+            </div>
+          </div>
+
+          <!-- Row 2: Segundo Turno + Aprovação -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+            <div class="cartao">
+              <div class="cabecalho-cartao">
+                <div class="titulo-cartao" style="font-size:.8rem;">SEGUNDO TURNO</div>
+                <span class="badge badge-purple">Simulação</span>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:.5rem;" id="dash-segundo-turno"></div>
+            </div>
+            <div class="cartao">
+              <div class="cabecalho-cartao">
+                <div class="titulo-cartao" style="font-size:.8rem;">APROVAÇÃO ADMINISTRATIVA</div>
+                <span class="badge badge-green">Gestão</span>
+              </div>
+              <div id="dash-aprovacao"></div>
+            </div>
+          </div>
+
+          <!-- Row 3: Evolução Histórica + Perfil do Eleitor -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+            <div class="cartao">
+              <div class="cabecalho-cartao">
+                <div class="titulo-cartao" style="font-size:.8rem;">EVOLUÇÃO HISTÓRICA</div>
+                <span class="badge">2026</span>
+              </div>
+              <div id="dash-evolucao"></div>
+            </div>
+            <div class="cartao">
+              <div class="cabecalho-cartao">
+                <div class="titulo-cartao" style="font-size:.8rem;">PERFIL DO ELEITOR</div>
+                <span class="badge">Demografia</span>
+              </div>
+              <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+                <div id="dash-perfil-genero"></div>
+                <div id="dash-perfil-idade"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Full Width: Mapa Eleitoral Ceará -->
+          <div class="cartao" style="margin-bottom:1rem;">
+            <div class="cabecalho-cartao">
+              <div class="titulo-cartao" style="font-size:.8rem;">MAPA ELEITORAL CEARÁ</div>
+              <span style="font-size:1rem;">🗺</span>
+            </div>
+            <div id="dash-mapa-cidades"></div>
+          </div>
+
+          <!-- Row 4: Produção de Campo + Alertas -->
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;margin-bottom:1rem;">
+            <div class="cartao">
+              <div class="cabecalho-cartao">
+                <div class="titulo-cartao" style="font-size:.8rem;">PRODUÇÃO DE CAMPO</div>
+                <span class="badge badge-green">Top 5</span>
+              </div>
+              <div id="dash-producao-campo"></div>
+            </div>
+            <div class="cartao">
+              <div class="cabecalho-cartao">
+                <div class="titulo-cartao" style="font-size:.8rem;">ALERTAS ESTRATÉGICOS</div>
+                <span class="badge badge-yellow">Ao Vivo</span>
+              </div>
+              <div id="dash-alertas"></div>
+            </div>
+          </div>
+
+          <!-- Full Width: Últimas Atividades -->
+          <div class="cartao" style="margin-bottom:1rem;">
+            <div class="cabecalho-cartao">
+              <div class="titulo-cartao" style="font-size:.8rem;">ÚLTIMAS ATIVIDADES</div>
+              <span class="badge badge-cyan">Tempo Real</span>
+            </div>
+            <div id="dash-atividades"></div>
+          </div>
+
+        </div>

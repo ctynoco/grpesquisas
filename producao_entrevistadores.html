@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="refresh" content="1; url=index.html">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Redirecionando - Centro de Inteligência Eleitoral</title>
+  <link rel="icon" href="logo.jpeg" type="image/jpeg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@600;700&family=Inter:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body {
+      background-color: #050811;
+      color: #f3f4f6;
+      font-family: 'Inter', sans-serif;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      margin: 0;
+      text-align: center;
+    }
+
+    .card {
+      background: rgba(15, 23, 42, 0.65);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      backdrop-filter: blur(16px);
+      border-radius: 16px;
+      padding: 2.5rem;
+      max-width: 420px;
+      box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .logo-container {
+      width: 80px;
+      height: 80px;
+      border-radius: 16px;
+      overflow: hidden;
+      border: 1px solid rgba(197, 168, 92, 0.4);
+      box-shadow: 0 0 15px rgba(197, 168, 92, 0.2);
+    }
+
+    .logo-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    h1 {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin: 0;
+      background: linear-gradient(to right, #ffffff, #c5a85c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    p {
+      font-size: 0.9rem;
+      color: #9ca3af;
+      line-height: 1.5;
+      margin: 0;
+    }
+
+    .loader {
+      width: 24px;
+      height: 24px;
+      border: 3px solid rgba(59, 130, 246, 0.1);
+      border-top-color: #3b82f6;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      background: linear-gradient(135deg, #1e40af 0%, #7c3aed 100%);
+      color: #ffffff;
+      border: none;
+      padding: 0.75rem 1.5rem;
+      border-radius: 8px;
+      font-size: 0.875rem;
+      font-weight: 600;
+      text-decoration: none;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(59, 130, 246, 0.3);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="card">
+    <div class="logo-container">
+      <img src="logo.jpeg" alt="Logo" class="logo-img">
+    </div>
+    
+    <div>
+      <h1>CEARÁ ELEITORAL</h1>
+      <p style="margin-top: 0.25rem; font-size: 0.75rem; text-transform: uppercase; color: #c5a85c; font-weight: 600; letter-spacing: 0.05em;">Centro de Inteligência</p>
+    </div>
+
+    <p>O painel de acompanhamento de entrevistadores foi integrado à nova plataforma unificada de inteligência eleitoral do Ceará.</p>
+    
+    <div class="loader"></div>
+    
+    <a href="index.html" class="btn">Acessar Nova Plataforma</a>
+  </div>
+
+</body>
+</html>
