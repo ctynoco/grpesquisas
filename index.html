@@ -2039,7 +2039,7 @@
 
             <div id="set-pane-questionario" class="painel-config">
               <div class="grade-config">
-                <div class="linha-config"><div class="info-config"><div class="rotulo-config">Número Máximo de Questões</div><div class="desc-config">Limite máximo de perguntas por questionário aplicado.</div></div><span style="font-size:0.85rem;font-weight:600;color:var(--text-1);">32 questões</span></div>
+                <div class="linha-config"><div class="info-config"><div class="rotulo-config">Número Máximo de Questões</div><div class="desc-config">Limite máximo de perguntas por questionário aplicado (mín. 1, máx. 60).</div></div><span style="font-size:0.85rem;font-weight:600;color:var(--text-1);">60 questões</span></div>
                 <div class="linha-config"><div class="info-config"><div class="rotulo-config">Obrigar Resposta</div><div class="desc-config">Todas as questões devem ser respondidas para finalizar.</div></div><label class="alternador"><input type="checkbox" checked><span class="deslizante"></span></label></div>
                 <div class="linha-config"><div class="info-config"><div class="rotulo-config">Embaralhar Opções</div><div class="desc-config">Apresentar opções de resposta em ordem aleatória.</div></div><label class="alternador"><input type="checkbox"><span class="deslizante"></span></label></div>
                 <div class="linha-config"><div class="info-config"><div class="rotulo-config">Pular Questão</div><div class="desc-config">Permitir que o entrevistador pule questões não aplicáveis.</div></div><label class="alternador"><input type="checkbox"><span class="deslizante"></span></label></div>
@@ -3130,6 +3130,7 @@ function salvarQuestaoEditor() {
     const q = DATA.questions.find(q => q.num === editNum);
     if (q) { q.texto = texto; q.tipo = tipo; q.opcoes = opcoesFiltradas; }
   } else {
+    if (DATA.questions.length >= 60) { alert('Limite máximo de 60 questões atingido.'); return; }
     DATA.questions.push({ num: '', texto: texto, tipo: tipo, opcoes: opcoesFiltradas });
     renumerarQuestoes();
     const lastPage = Math.ceil(DATA.questions.length / 8) - 1;
@@ -3304,6 +3305,7 @@ function adicionarQuestao() {
 }
 
 function excluirQuestao(num) {
+  if (DATA.questions.length <= 1) { alert('O questionário deve ter no mínimo 1 questão.'); return; }
   if (!confirm('Excluir questão ' + num + '?')) return;
   DATA.questions = DATA.questions.filter(q => q.num !== num);
   renumerarQuestoes();
