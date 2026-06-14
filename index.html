@@ -1151,8 +1151,8 @@
 
     <div class="campos-login">
       <div class="grupo-campo">
-        <label class="rotulo-campo" for="usuarioLogin">Usuário</label>
-        <input class="input-campo" type="text" id="usuarioLogin" placeholder="Ex: analista01">
+        <label class="rotulo-campo" for="usuarioLogin">Celular</label>
+        <input class="input-campo" type="text" id="usuarioLogin" placeholder="Ex: 85996962828">
       </div>
       <div class="grupo-campo">
         <label class="rotulo-campo" for="senhaLogin">Senha</label>
@@ -1166,9 +1166,9 @@
 
     <div class="demo-login">
       <strong>🔑 Demonstração:</strong><br>
-      Qualquer usuário e senha funcionam para fins demonstrativos.<br>
-      Selecione o perfil desejado e clique em <strong>Acessar</strong>.
-  </div>
+      Use o celular e senha de um usuário cadastrado.<br>
+      Padrão: celular <strong>85996962828</strong> · senha <strong>2314</strong>
+    </div>
 
 </div>
 </div>
@@ -1588,6 +1588,7 @@
                       <th onclick="ordenarCampo('concluidas',this)" id="th-conc">Concluídas</th>
                       <th onclick="ordenarCampo('tempoMedio',this)" id="th-tempo">Tempo Médio</th>
                       <th onclick="ordenarCampo('status',this)" id="th-status">Status</th>
+                      <th>Ações</th>
                     </tr>
                   </thead>
                   <tbody id="corpoTabelaCampo"></tbody>
@@ -1618,12 +1619,12 @@
               </div>
               <span class="badge" id="contagemUsuarios">0 usuários</span>
             </div>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;padding:.5rem 0;">
+            <div id="usuarioFormContainer" style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;padding:.5rem 0;">
               <input class="input-campo" type="text" id="nomeUsuario" placeholder="Nome completo" style="grid-column:1/3;">
-              <input class="input-campo" type="text" id="celularUsuario" placeholder="Celular">
-              <input class="input-campo" type="password" id="senhaUsuario" placeholder="Senha">
+              <input class="input-campo" type="text" id="celularUsuario" placeholder="Celular (usado no login)">
+              <input class="input-campo" type="password" id="senhaUsuario" placeholder="Senha (usada no login)">
               <select class="input-campo" id="funcaoUsuario">
-                <option value="Entrevistador">Entrevistador</option>
+                <option value="Entrevistador">Pesquisador</option>
                 <option value="Supervisor">Supervisor</option>
                 <option value="Coordenador">Coordenador</option>
                 <option value="Gerente">Gerente</option>
@@ -1634,10 +1635,14 @@
               </select>
               <select class="input-campo" id="municipioUsuario"></select>
             </div>
-            <button class="btn-simular" onclick="adicionarUsuario()" style="width:100%;margin-top:.5rem;">
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-              Adicionar Usuário
-            </button>
+            <div style="display:flex;gap:.5rem;margin-top:.5rem;">
+              <button class="btn-simular" onclick="salvarUsuario()" style="flex:1;">
+                <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                <span id="btnSalvarUsuarioTexto">Adicionar Novo Usuário</span>
+              </button>
+              <button class="btn-editor btn-excluir" id="btnCancelarEdicao" onclick="cancelarEdicao()" style="display:none;padding:.6rem .9rem;border-radius:10px;font-size:.82rem;">✕ Cancelar</button>
+            </div>
+            <input type="hidden" id="editUserId" value="">
           </div>
         </div>
 
@@ -2424,17 +2429,23 @@ function selecionarPerfil(el) {
   el.classList.add('selected'); DATA.profile = el.dataset.profile;
 }
 function fazerLogin() {
-  const user = document.getElementById('usuarioLogin').value.trim() || 'Usuário Demo';
-  DATA.nomeUsuario = user;
-  DATA.profile = document.querySelector('.cartao-perfil.selected').dataset.profile;
+  const celular = document.getElementById('usuarioLogin').value.trim();
+  const senha = document.getElementById('senhaLogin').value;
+  const user = DATA.interviewers.find(u => u.celular === celular && u.senha === senha);
+  if (!user) { alert('Celular ou senha inválidos.'); return; }
+  DATA.usuarioLogado = user;
+  DATA.nomeUsuario = user.nome;
+  const roleMap = { 'Entrevistador':'entrevistador', 'Supervisor':'supervisor', 'Coordenador':'analista', 'Gerente':'analista' };
+  DATA.profile = roleMap[user.funcao] || 'entrevistador';
   document.getElementById('telaLogin').style.display = 'none';
   document.getElementById('appPrincipal').style.display = 'block';
-  document.getElementById('nomeUsuario').textContent = user;
+  document.getElementById('nomeUsuario').textContent = user.nome;
   document.getElementById('userRole').textContent = DATA.profile.toUpperCase();
-  document.getElementById('userAvatar').textContent = user.charAt(0).toUpperCase();
+  document.getElementById('userAvatar').textContent = user.nome.charAt(0).toUpperCase();
   aplicarAcessoFuncao();
   if (DATA.profile === 'entrevistador') {
     document.getElementById('appPrincipal').style.display = 'none';
+    DATA.entrevistadorAtual = user.id;
     setTimeout(iniciarColetor, 200);
   } else {
     iniciarApp();
@@ -2788,7 +2799,7 @@ function renderizarCampo() {
   const rows = obterDadosCampo();
   document.getElementById('contagemCampo').textContent = `${rows.length} entrevistador${rows.length!==1?'es':''}`;
   const tbody = document.getElementById('corpoTabelaCampo');
-  if(!rows.length){tbody.innerHTML='<tr><td colspan="8" style="text-align:center;padding:2rem;color:var(--text-2);">Nenhum encontrado.</td></tr>';return;}
+  if(!rows.length){tbody.innerHTML='<tr><td colspan="9" style="text-align:center;padding:2rem;color:var(--text-2);">Nenhum encontrado.</td></tr>';return;}
   tbody.innerHTML = rows.map(i=>`
     <tr id="tr-int-${i.id}">
       <td style="font-weight:600;">${i.nome}</td>
@@ -2798,7 +2809,10 @@ function renderizarCampo() {
       <td>${i.concluidas}</td>
       <td style="font-variant-numeric:tabular-nums">${i.tempoMedio}</td>
       <td><span class="pilula-status pill-${i.status.toLowerCase()}"><span class="ponto-pilula"></span>${i.status}</span></td>
-      <td><button class="btn-editor btn-excluir" onclick="excluirUsuario(${i.id})" style="padding:.2rem .5rem;font-size:.7rem;">Excluir</button></td>
+      <td style="white-space:nowrap;">
+        <button class="btn-editor btn-editar" onclick="editarUsuario(${i.id})" style="padding:.2rem .5rem;font-size:.7rem;">✎</button>
+        <button class="btn-editor btn-excluir" onclick="excluirUsuario(${i.id})" style="padding:.2rem .5rem;font-size:.7rem;">✕</button>
+      </td>
     </tr>`).join('');
   const ranked=[...DATA.interviewers].sort((a,b)=>b.concluidas-a.concluidas);
   const maxC=ranked[0].concluidas;
@@ -2821,22 +2835,47 @@ function ordenarCampo(field, th) {
   renderizarCampo();
 }
 
-function adicionarUsuario() {
+function salvarUsuario() {
   const nome=document.getElementById('nomeUsuario').value.trim();
   const celular=document.getElementById('celularUsuario').value.trim();
   const senha=document.getElementById('senhaUsuario').value;
   const funcao=document.getElementById('funcaoUsuario').value;
   const status=document.getElementById('statusUsuario').value;
   const municipio=document.getElementById('municipioUsuario').value;
-  if(!nome){alert('Informe o nome do usuário.');return;}
-  DATA.interviewers.push({
-    id:DATA.proximoId++, nome, municipio, funcao, status,
-    celular, senha, pesquisas:0, concluidas:0, tempoMedio:'00:00', hoje:0, reg:null
-  });
-  limparFormulario(); renderizarCampo();
+  const editId=document.getElementById('editUserId').value;
+  if(!nome||!celular||!senha){alert('Preencha nome, celular e senha.');return;}
+  if(DATA.interviewers.some(u=>u.celular===celular&&u.id!=editId)){alert('Celular já cadastrado.');return;}
+  if(editId){
+    const u=DATA.interviewers.find(i=>i.id==editId);
+    if(u){u.nome=nome;u.celular=celular;u.senha=senha;u.funcao=funcao;u.status=status;u.municipio=municipio;}
+  } else {
+    DATA.interviewers.push({
+      id:DATA.proximoId++, nome, municipio, funcao, status,
+      celular, senha, pesquisas:0, concluidas:0, tempoMedio:'00:00', hoje:0, reg:null
+    });
+  }
+  cancelarEdicao(); renderizarCampo();
 }
 
-function limparFormulario() {
+function editarUsuario(id) {
+  const u=DATA.interviewers.find(i=>i.id===id);
+  if(!u)return;
+  document.getElementById('nomeUsuario').value=u.nome;
+  document.getElementById('celularUsuario').value=u.celular;
+  document.getElementById('senhaUsuario').value=u.senha;
+  document.getElementById('funcaoUsuario').value=u.funcao;
+  document.getElementById('statusUsuario').value=u.status;
+  document.getElementById('municipioUsuario').value=u.municipio;
+  document.getElementById('editUserId').value=id;
+  document.getElementById('btnSalvarUsuarioTexto').textContent='Salvar Alterações';
+  document.getElementById('btnCancelarEdicao').style.display='block';
+  document.getElementById('usuarioFormContainer').scrollIntoView({behavior:'smooth',block:'center'});
+}
+
+function cancelarEdicao() {
+  document.getElementById('editUserId').value='';
+  document.getElementById('btnSalvarUsuarioTexto').textContent='Adicionar Novo Usuário';
+  document.getElementById('btnCancelarEdicao').style.display='none';
   ['nomeUsuario','celularUsuario','senhaUsuario'].forEach(id=>document.getElementById(id).value='');
 }
 
