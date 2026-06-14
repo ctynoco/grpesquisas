@@ -1253,6 +1253,10 @@
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
           Tabulação de Dados
         </button>
+        <button class="btn-nav" data-tab="cruzamentos" data-roles="analista,supervisor" onclick="alternarAba('cruzamentos', this)">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2"/><line x1="3" y1="9" x2="21" y2="9"/><line x1="9" y1="3" x2="9" y2="21"/><line x1="15" y1="3" x2="15" y2="21"/></svg>
+          Cruzamentos
+        </button>
         <button class="btn-nav" data-tab="auditoria" data-roles="analista,supervisor" onclick="alternarAba('auditoria', this)">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="m9 12 2 2 4-4"/></svg>
           Auditoria & Supervisão
@@ -1893,6 +1897,73 @@
           </div>
         </div>
 
+        <!-- ========== CRUZAMENTOS ========== -->
+        <div class="aba-painel" id="painel-cruzamentos">
+          <div class="grade-2 grade-larga">
+            <div class="cartao">
+              <div class="cabecalho-cartao">
+                <div class="titulo-cartao">Gênero</div>
+                <span class="badge">Distribuição</span>
+              </div>
+              <div id="cruz-genero" style="padding:.5rem 0;"></div>
+            </div>
+            <div class="cartao">
+              <div class="cabecalho-cartao">
+                <div class="titulo-cartao">Faixa Etária</div>
+                <span class="badge">Perfil da amostra</span>
+              </div>
+              <div id="cruz-etaria" style="padding:.5rem 0;"></div>
+            </div>
+          </div>
+          <div class="grade-2">
+            <div class="cartao">
+              <div class="cabecalho-cartao">
+                <div class="titulo-cartao">Escolaridade</div>
+                <span class="badge">Grau de instrução</span>
+              </div>
+              <div id="cruz-instrucao" style="padding:.5rem 0;"></div>
+            </div>
+            <div class="cartao">
+              <div class="cabecalho-cartao">
+                <div class="titulo-cartao">Renda Familiar</div>
+                <span class="badge">Por salário mínimo</span>
+              </div>
+              <div id="cruz-renda" style="padding:.5rem 0;"></div>
+            </div>
+          </div>
+          <div class="cartao">
+            <div class="cabecalho-cartao">
+              <div class="titulo-cartao">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h18v18H3zM3 9h18M3 15h18M9 3v18M15 3v18"/></svg>
+                Tabela de Cruzamento — Candidato × Perfil Demográfico
+              </div>
+              <span class="badge badge-yellow">Filtrável</span>
+            </div>
+            <div class="envoltorio-tabela">
+              <table>
+                <thead>
+                  <tr>
+                    <th>Perfil</th>
+                    <th id="cruz-th-A" style="color:var(--cyan-500)">Candidato A</th>
+                    <th id="cruz-th-B" style="color:#c084fc">Candidato B</th>
+                    <th id="cruz-th-C" style="color:var(--yellow-400)">Candidato C</th>
+                    <th>Branco/Nulo</th>
+                    <th>Indeciso</th>
+                  </tr>
+                </thead>
+                <tbody id="corpoCruzCandidato"></tbody>
+              </table>
+            </div>
+          </div>
+          <div class="cartao">
+            <div class="cabecalho-cartao">
+              <div class="titulo-cartao">Top 10 Municípios</div>
+              <span class="badge">Entrevistas concluídas</span>
+            </div>
+            <div id="cruz-municipios" style="padding:.5rem 0;"></div>
+          </div>
+        </div>
+
         <!-- ========== AUDITORIA ========== -->
         <div class="aba-painel" id="painel-auditoria">
           <div class="grade-2 grade-larga">
@@ -2513,6 +2584,7 @@ const tabTitles = {
   campo:['GERARDO / Operações de Campo','Operações de Campo'],
   editor:['GERARDO / Editor de Questionário','Editor de Questionário Eleitoral'],
   tabulacao:['GERARDO / Tabulação','Tabulação e Cruzamentos Demográficos'],
+  cruzamentos:['GERARDO / Cruzamentos','Cruzamentos Demográficos'],
   auditoria:['GERARDO / Auditoria','Auditoria & Supervisão'],
   questionarios:['GERARDO / Questionários','Roteiro Metodológico de Campo'],
   relatorios:['GERARDO / Relatórios','Relatórios & Exportação'],
@@ -3399,6 +3471,34 @@ function editarQuestao(num) {
 // ================================================================
 // TABULAÇÃO
 // ================================================================
+function renderizarCruzamentos() {
+  var t = DATA.demographics.etaria.reduce(function(s,d){return s+d.pct;},0);
+  var maxE = Math.max.apply(null, DATA.demographics.etaria.map(function(d){return d.pct;}));
+  document.getElementById('cruz-genero').innerHTML =
+    buildBarRow('Masculino', 48, 100, 'preenchimento-ciano', '48%') +
+    buildBarRow('Feminino', 52, 100, 'preenchimento-roxo', '52%');
+  document.getElementById('cruz-etaria').innerHTML = DATA.demographics.etaria.map(function(d){
+    return buildBarRow(d.label, d.pct, maxE, 'preenchimento-ciano', d.pct+'%');
+  }).join('');
+  document.getElementById('cruz-instrucao').innerHTML = DATA.demographics.instrucao.map(function(d){
+    return buildBarRow(d.label, d.pct, maxE, 'preenchimento-roxo', d.pct+'%');
+  }).join('');
+  document.getElementById('cruz-renda').innerHTML = DATA.demographics.renda.map(function(d){
+    return buildBarRow(d.label, d.pct, maxE, 'preenchimento-verde', d.pct+'%');
+  }).join('');
+  var cands = ['A','B','C','N','I'];
+  document.getElementById('corpoCruzCandidato').innerHTML = DATA.dadosCruzados.map(function(row){
+    var cols = cands.map(function(k){return '<td>' + row[k] + '%</td>';}).join('');
+    return '<tr><td style="font-weight:600;">' + row.perfil + '</td>' + cols + '</tr>';
+  }).join('');
+  var top10 = DATA.municipios.slice().sort(function(a,b){return b.completed-a.completed;}).slice(0,10);
+  var maxM = Math.max.apply(null, top10.map(function(m){return m.completed;}));
+  document.getElementById('cruz-municipios').innerHTML = top10.map(function(m){
+    var p = m.target>0 ? Math.round((m.completed/m.target)*100) : 0;
+    return buildBarRow(m.name, p, 100, 'preenchimento-ciano', m.completed+'/'+m.target);
+  }).join('');
+}
+
 function renderizarTabulacao() {
   const circumference = 2 * Math.PI * 48;
   const femArc = (52/100)*circumference, mascArc = (48/100)*circumference;
@@ -3806,6 +3906,7 @@ function renderizarAba(tab) {
   if(tab==='campo') renderizarCampo();
   if(tab==='editor') renderizarEditor();
   if(tab==='tabulacao') renderizarTabulacao();
+  if(tab==='cruzamentos') renderizarCruzamentos();
   if(tab==='auditoria') renderizarAuditoria();
   if(tab==='questionarios') renderizarQuestionarios();
   if(tab==='relatorios') renderizarRelatorios();
