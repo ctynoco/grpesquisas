@@ -2258,6 +2258,7 @@
     </button>
     <span style="color:var(--text-3);font-size:0.75rem;font-weight:600;">|</span>
     <button class="btn-impressao btn-ativo" onclick="alternarSecaoImpressao('graficos', this)">Gráficos</button>
+    <button class="btn-impressao btn-ativo" onclick="alternarSecaoImpressao('cruzamentos', this)">Cruzamentos</button>
     <button class="btn-impressao btn-ativo" onclick="alternarSecaoImpressao('tabelas', this)">Tabelas</button>
     <button class="btn-impressao btn-ativo" onclick="alternarSecaoImpressao('questionarios', this)">Questionários</button>
     <button class="btn-impressao" onclick="alternarSecaoImpressao('questionarios-sem', this)">Q. s/ dados</button>
@@ -2308,6 +2309,20 @@
       <div id="tabelaCruzadaImpressao"></div>
     </div>
 
+    <!-- Cruzamentos -->
+    <div id="secao-impressao-cruzamentos">
+      <div class="titulo-secao-impressao" style="margin-top:1rem;">Gênero</div>
+      <div id="impressaoCruzGenero" style="margin-bottom:1rem;"></div>
+      <div class="titulo-secao-impressao">Faixa Etária</div>
+      <div id="impressaoCruzEtaria" style="margin-bottom:1rem;"></div>
+      <div class="titulo-secao-impressao">Escolaridade</div>
+      <div id="impressaoCruzInstrucao" style="margin-bottom:1rem;"></div>
+      <div class="titulo-secao-impressao">Renda Familiar</div>
+      <div id="impressaoCruzRenda" style="margin-bottom:1rem;"></div>
+      <div class="titulo-secao-impressao">Top 10 Municípios</div>
+      <div id="impressaoCruzMunicipios" style="margin-bottom:1rem;"></div>
+    </div>
+
     <!-- Questionários -->
     <div id="secao-impressao-questionarios">
       <div class="titulo-secao-impressao" style="margin-top:1rem;">Questionário Aplicado</div>
@@ -2354,7 +2369,7 @@ const DATA = {
   filtroCandidatoSelecionado: 'todos',
   abaEditorAtual: 0,
   questionarioModo: 'dados',
-  secoesImpressao: { graficos:true, tabelas:true, questionarios:true, 'questionarios-sem':false },
+  secoesImpressao: { graficos:true, tabelas:true, cruzamentos:true, questionarios:true, 'questionarios-sem':false },
   orientacaoImpressao: 'portrait', corImpressao: 'colorido',
 
   municipios: [
@@ -3839,18 +3854,27 @@ function alternarSecaoImpressao(section, btn) {
 }
 
 function renderizarConteudoImpressao() {
-  const total=totalConcluidas(), tv=totalVotos();
+  const total=totalConcluidas(), tv=totalVotos(), te=totalEspontanea();
   const leader=DATA.candidates.reduce((b,c)=>c.votos>b.votos?c:b,DATA.candidates[0]);
   document.getElementById('kpisImpressao').innerHTML=`
     <div class="item-kpi-impressao"><div class="kpi-val">${total}</div><div class="kpi-lbl">Pesquisas</div></div>
     <div class="item-kpi-impressao"><div class="kpi-val">±${String(margemErro(total).toFixed(2)).replace('.',',')}%</div><div class="kpi-lbl">Margem</div></div>
     <div class="item-kpi-impressao"><div class="kpi-val">${pct(leader.votos,tv)}%</div><div class="kpi-lbl">${leader.name}</div></div>`;
-  document.getElementById('impressaoEstimulada').innerHTML=DATA.candidates.map(c=>{const p=pct(c.votos,tv);return `<div style="display:flex;justify-content:space-between;padding:.25rem 0;"><span>${c.name}</span><strong>${p}%</strong></div>`;}).join('');
-  const te=totalEspontanea();
-  document.getElementById('impressaoEspontanea').innerHTML=DATA.espontanea.map(c=>{const p=pct(c.votos,te);return `<div style="display:flex;justify-content:space-between;padding:.25rem 0;"><span>${c.name}</span><strong>${p}%</strong></div>`;}).join('');
-  document.getElementById('impressaoRejeicao').innerHTML=DATA.rejection.map(r=>`<div style="display:flex;justify-content:space-between;padding:.25rem 0;"><span>${r.name}</span><strong>${r.value}%</strong></div>`).join('');
+  document.getElementById('impressaoEstimulada').innerHTML=DATA.candidates.map(function(c){return printBarVotos(c,c.votos,tv);}).join('');
+  document.getElementById('impressaoEspontanea').innerHTML=DATA.espontanea.map(function(c){var p=pct(c.votos,te);return printBar(c.name,p,'#f59e0b');}).join('');
+  document.getElementById('impressaoRejeicao').innerHTML=DATA.rejection.map(function(r){return printBar(r.name,r.value,'#ef4444');}).join('');
   document.getElementById('tabelaCampoImpressao').innerHTML=`<table><thead><tr><th>Nome</th><th>Município</th><th>Função</th><th>Pesquisas</th><th>Concluídas</th><th>Status</th></tr></thead><tbody>${DATA.interviewers.slice(0,8).map(i=>`<tr><td>${i.nome}</td><td>${i.municipio}</td><td>${i.funcao}</td><td>${i.pesquisas}</td><td>${i.concluidas}</td><td>${i.status}</td></tr>`).join('')}</tbody></table>`;
-  document.getElementById('tabelaCruzadaImpressao').innerHTML=`<table><thead><tr><th>Perfil</th><th>Cand. A</th><th>Cand. B</th><th>Cand. C</th><th>B/N</th><th>Ind.</th></tr></thead><tbody>${DATA.dadosCruzados.slice(0,5).map(r=>`<tr><td>${r.perfil}</td><td>${r.A}%</td><td>${r.B}%</td><td>${r.C}%</td><td>${r.N}%</td><td>${r.I}%</td></tr>`).join('')}</tbody></table>`;
+  document.getElementById('tabelaCruzadaImpressao').innerHTML=`<table><thead><tr><th>Perfil</th><th>Cand. A</th><th>Cand. B</th><th>Cand. C</th><th>B/N</th><th>Ind.</th></tr></thead><tbody>${DATA.dadosCruzados.slice(0,8).map(r=>`<tr><td>${r.perfil}</td><td>${r.A}%</td><td>${r.B}%</td><td>${r.C}%</td><td>${r.N}%</td><td>${r.I}%</td></tr>`).join('')}</tbody></table>`;
+  document.getElementById('impressaoCruzGenero').innerHTML=printBar('Masculino',48,'#06b6d4')+printBar('Feminino',52,'#ec4899');
+  var maxE=Math.max.apply(null,DATA.demographics.etaria.map(function(d){return d.pct;}));
+  document.getElementById('impressaoCruzEtaria').innerHTML=DATA.demographics.etaria.map(function(d){return printBar(d.label,d.pct,'#c084fc');}).join('');
+  document.getElementById('impressaoCruzInstrucao').innerHTML=DATA.demographics.instrucao.map(function(d){return printBar(d.label,d.pct,'#8b5cf6');}).join('');
+  document.getElementById('impressaoCruzRenda').innerHTML=DATA.demographics.renda.map(function(d){return printBar(d.label,d.pct,'#10b981');}).join('');
+  var top10=DATA.municipios.slice().sort(function(a,b){return b.completed-a.completed;}).slice(0,10);
+  document.getElementById('impressaoCruzMunicipios').innerHTML=top10.map(function(m){
+    var p=m.target>0?Math.round((m.completed/m.target)*100):0;
+    return printBar(m.name,p,'#0ea5e9');
+  }).join('');
   document.getElementById('questoesImpressao').innerHTML=DATA.questions.map(q=>`<div style="margin-bottom:.75rem;"><strong>${q.num}:</strong> ${q.texto}<br><span style="font-size:9pt;color:#666;">${q.opcoes.map(o=>`${o.t} (${o.p}%)`).join(' | ')}</span></div>`).join('');
   document.getElementById('questoesImpressaoSem').innerHTML=DATA.questions.map(q=>`<div style="margin-bottom:.75rem;"><strong>${q.num}:</strong> ${q.texto}<br><span style="font-size:9pt;color:#666;">${q.opcoes.map(o=>`${o.t} (____%)`).join(' | ')}</span></div>`).join('');
 }
