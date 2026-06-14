@@ -395,7 +395,7 @@
       #painel-impressao { max-width: 90% !important; }
       .sub-aba-impressao { display: none; }
       .sub-aba-impressao.active { display: block; }
-      .area-impressao { border: 2px dashed #06b6d4; border-radius: 6px; padding: 10mm; background: #fff; margin: .5rem auto; max-width: 210mm; box-shadow: 0 2px 12px rgba(0,0,0,0.1); font-family: 'Courier New', monospace; font-size: 12px; color: #111; background-image: linear-gradient(to right, #e8e8e8 1px, transparent 1px), linear-gradient(to bottom, #e8e8e8 1px, transparent 1px); background-size: 25px 25px; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
+      .area-impressao { border: 1px solid #d1d5db; border-radius: 4px; padding: 8mm 10mm; background: #fff; margin: .5rem auto; max-width: 210mm; box-shadow: 0 1px 8px rgba(0,0,0,0.08); font-family: 'Georgia', 'Times New Roman', serif; font-size: 11px; color: #111; line-height: 1.5; print-color-adjust: exact; -webkit-print-color-adjust: exact; }
       .area-impressao.landscape { max-width: 297mm; }
       .area-impressao.print-pb { filter: grayscale(1); -webkit-filter: grayscale(1); }
       .area-impressao.print-pb .cabecalho-impressao-inline img { filter: grayscale(1); }
@@ -406,17 +406,17 @@
       .btn-orientacao.btn-ativo { background: var(--cyan-500); color: #fff; }
       @media print {
         html, body { margin: 0 !important; padding: 0 !important; width: 100% !important; height: auto !important; overflow: visible !important; background: #fff !important; }
-        body { color: #000 !important; font-size: 12pt !important; line-height: 1.4 !important; }
+        body { color: #000 !important; font-size: 11pt !important; line-height: 1.5 !important; }
         .barra-lateral, .barra-topo, .btn-nav, .btn-simular, .btn-sair, .aba-filtro, .linha-controles,
         #painel-impressao > .linha-controles, .cabecalho-cartao, .btn-orientacao { display: none !important; }
         .area-principal, #appPrincipal, .layout-app { padding: 0 !important; margin: 0 !important; max-width: 100% !important; width: 100% !important; }
         #painel-impressao { max-width: 100% !important; width: 100% !important; margin: 0 !important; padding: 0 !important; display: block !important; position: static !important; }
         .sub-aba-impressao { display: none !important; }
         .sub-aba-impressao.active { display: block !important; }
-        .area-impressao { border: none !important; padding: 10mm 12mm !important; margin: 0 !important; border-radius: 0 !important; max-width: 100% !important; width: 100% !important; box-shadow: none !important; box-sizing: border-box !important; background-image: none !important; background: #fff !important; font-size: 11pt !important; }
+        .area-impressao { border: none !important; padding: 8mm 10mm !important; margin: 0 !important; border-radius: 0 !important; max-width: 100% !important; width: 100% !important; box-shadow: none !important; box-sizing: border-box !important; background: #fff !important; font-size: 10pt !important; font-family: 'Georgia', 'Times New Roman', serif !important; }
         .area-impressao table { page-break-inside: avoid; }
         .area-impressao div { page-break-inside: avoid; }
-        @page { margin: 8mm 10mm; }
+        @page { margin: 6mm 8mm; }
       }
 
     .aba-painel { display: none; flex-direction: column; gap: 1.75rem; animation: fadeSlide 0.35s ease; }
@@ -874,13 +874,16 @@
 
     /* ===== PRINT STYLES ===== */
     @media print {
-      body { background: #fff !important; color: #000 !important; }
+      body { background: #fff !important; color: #000 !important; font-size: 10pt !important; line-height: 1.5 !important; }
       .barra-lateral, .barra-topo, .btn-simular, .btn-sair, .btn-nav { display: none !important; }
       .sobreposicao-impressao { position: static !important; background: none !important; padding: 0 !important; }
       .barra-ferramentas-impressao { display: none !important; }
-      .pagina-impressao { width: 100% !important; margin: 0 !important; border-radius: 0 !important; padding: 10mm 12mm !important; box-shadow: none !important; }
+      .pagina-impressao { width: 100% !important; margin: 0 !important; border-radius: 0 !important; padding: 6mm 8mm !important; box-shadow: none !important; font-family: 'Georgia', 'Times New Roman', serif !important; }
       .pagina-impressao.landscape { width: 100% !important; }
       .fechar-impressao { display: none !important; }
+      .pagina-impressao .titulo-secao-impressao { font-size: 10pt !important; }
+      .pagina-impressao table th { font-size: 7pt !important; padding: 0.25rem 0.35rem !important; }
+      .pagina-impressao table td { font-size: 7.5pt !important; padding: 0.2rem 0.35rem !important; }
       @page { margin: 0; }
     }
 
@@ -1030,7 +1033,7 @@
       width: 210mm; min-height: 297mm;
       background: #fff; color: #111; margin: 2rem auto; padding: 15mm 20mm;
       box-shadow: 0 8px 40px rgba(0,0,0,0.5); border-radius: 4px;
-      font-family: 'Inter', 'Arial', sans-serif; font-size: 10pt; line-height: 1.6;
+      font-family: 'Georgia', 'Times New Roman', serif; font-size: 10pt; line-height: 1.6;
     }
     .pagina-impressao.landscape { width: 297mm; min-height: 210mm; }
     .pagina-impressao.print-pb { filter: grayscale(1); -webkit-filter: grayscale(1); }
@@ -1044,15 +1047,15 @@
     .logo-impressao img { width: 100%; height: 100%; object-fit: cover; }
     .marca-impressao { font-size: 1.25rem; font-weight: 800; color: #000; letter-spacing: -0.02em; }
     .impressao-direita { text-align: right; font-size: 8pt; color: #666; }
-    .titulo-secao-impressao { font-size: 1.1rem; font-weight: 700; margin-bottom: 0.75rem; color: #000; }
+    .titulo-secao-impressao { font-size: 11pt; font-weight: 700; margin-bottom: 0.5rem; color: #111; border-bottom: 1px solid #ddd; padding-bottom: 0.2rem; }
     .linha-kpi-impressao { display: flex; gap: 1rem; margin-bottom: 1rem; }
-    .item-kpi-impressao { flex: 1; text-align: center; padding: 0.75rem; background: #f9fafb; border-radius: 8px; }
-    .item-kpi-impressao .kpi-val { font-size: 1.5rem; font-weight: 800; color: #000; }
-    .item-kpi-impressao .kpi-lbl { font-size: 0.7rem; color: #666; text-transform: uppercase; font-weight: 600; }
-    .tabela-impressao { width: 100%; border-collapse: collapse; margin-bottom: 1rem; }
-    .tabela-impressao th { background: #f3f4f6; color: #374151; font-size: 0.7rem; padding: 0.5rem 0.75rem; text-align: left; border: 1px solid #e5e7eb; }
-    .tabela-impressao td { padding: 0.4rem 0.75rem; border: 1px solid #e5e7eb; font-size: 0.8rem; color: #374151; }
-    .rodape-impressao { margin-top: 1.5rem; padding-top: 0.75rem; border-top: 1px solid #e5e7eb; font-size: 0.7rem; color: #9ca3af; text-align: center; }
+    .item-kpi-impressao { flex: 1; text-align: center; padding: 0.6rem 0.5rem; background: #f9fafb; border-radius: 6px; }
+    .item-kpi-impressao .kpi-val { font-size: 1.3rem; font-weight: 800; color: #000; }
+    .item-kpi-impressao .kpi-lbl { font-size: 0.65rem; color: #666; text-transform: uppercase; font-weight: 600; letter-spacing: 0.03em; }
+    .pagina-impressao table { width: 100%; border-collapse: collapse; margin-bottom: 1rem; font-family: Arial,Helvetica,sans-serif; }
+    .pagina-impressao table th { background: #f3f4f6; color: #374151; font-size: 7.5pt; padding: 0.4rem 0.5rem; text-align: left; border: 1px solid #e5e7eb; font-weight: 700; }
+    .pagina-impressao table td { padding: 0.3rem 0.5rem; border: 1px solid #e5e7eb; font-size: 8pt; color: #374151; }
+    .rodape-impressao { margin-top: 1.5rem; padding-top: 0.75rem; border-top: 1px solid #e5e7eb; font-size: 0.65rem; color: #9ca3af; text-align: center; }
 
     /* ===== COLETOR DE PESQUISA ===== */
     #coletorOverlay { display:none; position:fixed; inset:0; z-index:99999; background:var(--bg-deep); color:var(--text-1); font-family:Inter,sans-serif; flex-direction:column; overflow:hidden; }
@@ -3658,12 +3661,14 @@ function logoHeader() {
 
 function printBar(label, pctVal, color) {
   var c = color || '#06b6d4';
-  return '<div style="margin-bottom:.35rem;"><div style="display:flex;justify-content:space-between;font-size:.72rem;font-weight:600;color:#333;margin-bottom:.15rem;"><span>' + label + '</span><span>' + pctVal + '%</span></div>' +
-    '<div style="height:14px;background:#e5e7eb;border-radius:7px;overflow:hidden;"><div style="height:100%;width:' + pctVal + '%;background:' + c + ';border-radius:7px;"></div></div></div>';
+  return '<div style="margin-bottom:.25rem;font-family:Arial,Helvetica,sans-serif;"><div style="display:flex;justify-content:space-between;font-size:8.5pt;color:#333;margin-bottom:2px;"><span style="font-weight:600;">' + label + '</span><span style="font-weight:700;color:' + c + ';">' + pctVal + '%</span></div>' +
+    '<div style="height:10px;background:#f0f0f0;border-radius:5px;overflow:hidden;"><div style="height:100%;width:' + pctVal + '%;background:' + c + ';border-radius:5px;"></div></div></div>';
 }
 function printBarVotos(cand, v, totalV) {
   var p = +((v/totalV)*100).toFixed(1);
-  return printBar(cand.name + ' ' + (cand.subname||''), p, cand.color);
+  var sub = cand.subname ? '<span style="font-weight:400;font-size:7.5pt;color:#999;margin-left:4px;">' + cand.subname + '</span>' : '';
+  return '<div style="margin-bottom:.25rem;font-family:Arial,Helvetica,sans-serif;"><div style="display:flex;justify-content:space-between;font-size:8.5pt;color:#333;margin-bottom:2px;"><span><span style="font-weight:600;">' + cand.name + '</span>' + sub + '</span><span style="font-weight:700;color:' + cand.color + ';">' + p + '%</span></div>' +
+    '<div style="height:10px;background:#f0f0f0;border-radius:5px;overflow:hidden;"><div style="height:100%;width:' + p + '%;background:' + cand.color + ';border-radius:5px;"></div></div></div>';
 }
 
 function renderizarImpressao() {
