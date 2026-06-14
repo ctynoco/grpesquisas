@@ -2191,19 +2191,19 @@
     <button class="fechar-impressao" onclick="fecharSobreposicaoImpressao()">✕ Fechar</button>
   </div>
   <div class="pagina-impressao" id="paginaImpressao">
-    <div class="cabecalho-impressao">
-      <div class="impressao-esquerda">
-        <div class="logo-impressao"><img src="logo.jpeg" alt="GERARDO"></div>
-        <div>
-          <div class="marca-impressao">GERARDO</div>
-          <div style="font-size:8pt;color:#666;">Sistema de Pesquisa Eleitoral · Ceará 2026</div>
+      <div class="cabecalho-impressao">
+        <div class="impressao-esquerda">
+          <div class="logo-impressao" style="width:40px;height:40px;background:#0a1628;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg></div>
+          <div>
+            <div class="marca-impressao">GERARDO</div>
+            <div style="font-size:8pt;color:#666;">Sistema de Pesquisa Eleitoral · Ceará 2026</div>
+          </div>
+        </div>
+        <div class="impressao-direita">
+          <div id="dataImpressao"></div>
+          <div>Confidencial</div>
         </div>
       </div>
-      <div class="impressao-direita">
-        <div id="dataImpressao"></div>
-        <div>Confidencial</div>
-      </div>
-    </div>
 
     <!-- KPIs -->
     <div class="titulo-secao-impressao">Resumo Executivo</div>
@@ -3492,13 +3492,22 @@ function alternarCorAreaImpressao(modo, btn) {
   document.querySelectorAll('#painel-impressao .area-impressao').forEach(a=>a.classList.toggle('print-pb', modo==='pb'));
 }
 
+var logoSvg = '<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#06b6d4" stroke-width="1.5"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>';
+
+function logoHeader() {
+  return '<div style="display:flex;align-items:center;justify-content:center;gap:.75rem;margin-bottom:.5rem;">' +
+    '<div style="width:40px;height:40px;background:#0a1628;border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;">' + logoSvg + '</div>' +
+    '<div><div style="font-size:18px;font-weight:900;letter-spacing:2px;color:#000;">GR PESQUISAS</div>' +
+    '<div style="font-size:9px;color:#555;letter-spacing:1px;">INSTITUTO DE PESQUISA E INTELIGÊNCIA DE DADOS</div></div></div>';
+}
+
 function renderizarImpressao() {
   const total = totalConcluidas(), tv = totalVotos(), te = totalEspontanea();
   const progress = pct(total, DATA.metaGlobal);
   const cabecalho = '<div style="text-align:center;margin-bottom:1rem;border-bottom:2px solid #222;padding-bottom:.5rem;">' +
-    '<div style="font-size:18px;font-weight:900;">GR PESQUISAS</div>' +
-    '<div style="font-size:10px;">RELATÓRIO EXECUTIVO — PESQUISA ELEITORAL CEARÁ 2026</div></div>';
-  const rodape = '<div style="border-top:2px solid #222;padding-top:.5rem;font-size:9px;text-align:center;margin-top:1rem;">GERARDO — ' + new Date().toLocaleString('pt-BR') + '</div>';
+    logoHeader() +
+    '<div style="font-size:10px;color:#888;">RELATÓRIO EXECUTIVO — PESQUISA ELEITORAL CEARÁ 2026</div></div>';
+  const rodape = '<div style="border-top:2px solid #222;padding-top:.5rem;font-size:9px;text-align:center;margin-top:1rem;color:#999;">GERARDO — ' + new Date().toLocaleString('pt-BR') + '</div>';
 
   // Dashboard
   document.getElementById('impressao-sub-dashboard').innerHTML = cabecalho +
@@ -3634,8 +3643,12 @@ function alternarCorImpressao(modo, btn) {
 function alternarSecaoImpressao(section, btn) {
   DATA.secoesImpressao[section] = !DATA.secoesImpressao[section];
   btn.classList.toggle('btn-ativo');
-  const el = document.getElementById('print-section-'+section);
-  if(el) el.style.display = DATA.secoesImpressao[section] ? 'block' : 'none';
+  const el = document.getElementById('secao-impressao-' + section.replace('questionarios-sem','questionarios'));
+  if (el) el.style.display = DATA.secoesImpressao[section] ? 'block' : 'none';
+  if (section === 'questionarios-sem') {
+    const el2 = document.getElementById('secao-impressao-questionarios');
+    if (el2) el2.style.display = DATA.secoesImpressao['questionarios-sem'] ? 'none' : 'block';
+  }
 }
 
 function renderizarConteudoImpressao() {
