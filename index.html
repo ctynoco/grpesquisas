@@ -2093,6 +2093,7 @@
             <div class="abas-filtro">
               <button class="aba-filtro active" onclick="alternarSubAbaImpressao('dashboard',this)">📊 Dashboard</button>
               <button class="aba-filtro" onclick="alternarSubAbaImpressao('graficos',this)">📈 Gráficos</button>
+              <button class="aba-filtro" onclick="alternarSubAbaImpressao('cruzamentos',this)">📊 Cruzamentos</button>
               <button class="aba-filtro" onclick="alternarSubAbaImpressao('tabelas',this)">📋 Tabelas</button>
               <button class="aba-filtro" onclick="alternarSubAbaImpressao('questionario',this)">📃 Questionário</button>
               <button class="aba-filtro" onclick="alternarSubAbaImpressao('relatorio',this)">📄 Relatório</button>
@@ -2126,6 +2127,15 @@
                 <div class="cartao" style="margin-bottom:1rem;">
                   <div class="cabecalho-cartao"><div class="titulo-cartao">📈 Gráficos</div></div>
                   <div id="impressao-sub-graficos"></div>
+                </div>
+              </div>
+            </div>
+            <!-- Cruzamentos Print View -->
+            <div class="sub-aba-impressao" id="subimp-cruzamentos">
+              <div class="area-impressao">
+                <div class="cartao" style="margin-bottom:1rem;">
+                  <div class="cabecalho-cartao"><div class="titulo-cartao">📊 Cruzamentos Demográficos</div></div>
+                  <div id="impressao-sub-cruzamentos"></div>
                 </div>
               </div>
             </div>
@@ -2314,6 +2324,36 @@ const DATA = {
     ]}
   ]
 };
+(function(){
+  var todas = ('Abaiara,Acarape,Acaraú,Acopiara,Aiuaba,Alcântaras,Altaneira,Alto Santo,Amontada,'+
+  'Antonina do Norte,Apuiarés,Aquiraz,Aracati,Aracoiaba,Ararendá,Araripe,Aratuba,Arneiroz,Assaré,Aurora,'+
+  'Baixio,Banabuiú,Barbalha,Barreira,Barro,Barroquinha,Baturité,Beberibe,Bela Cruz,Boa Viagem,Brejo Santo,'+
+  'Camocim,Campos Sales,Canindé,Capistrano,Caridade,Cariré,Caririaçu,Cariús,Carnaubal,Cascavel,Catarina,'+
+  'Catunda,Cedro,Chaval,Choró,Chorozinho,Coreaú,Crateús,Crato,Croatá,Cruz,Deputado Irapuan Pinheiro,Ererê,'+
+  'Eusébio,Farias Brito,Forquilha,Fortim,Frecheirinha,General Sampaio,Graça,Granja,Granjeiro,Groaíras,'+
+  'Guaiúba,Guaraciaba do Norte,Guaramiranga,Hidrolândia,Horizonte,Ibaretama,Ibiapina,Ibicuitinga,Icapuí,'+
+  'Icó,Iguatu,Independência,Ipaporanga,Ipaumirim,Ipu,Ipueiras,Iracema,Irauçuba,Itaiçaba,Itaitinga,Itapajé,'+
+  'Itapipoca,Itapiúna,Itarema,Itatira,Jaguaretama,Jaguaribara,Jaguaribe,Jaguaruana,Jardim,Jati,'+
+  'Jijoca de Jericoacoara,Jucás,Lavras da Mangabeira,Limoeiro do Norte,Madalena,Maranguape,Marco,'+
+  'Martinópole,Massapê,Mauriti,Meruoca,Milagres,Milhã,Miraíma,Missão Velha,Mombaça,Monsenhor Tabosa,'+
+  'Morada Nova,Moraújo,Morrinhos,Mucambo,Mulungu,Nova Olinda,Nova Russas,Novo Oriente,Ocara,Orós,'+
+  'Pacajus,Pacatuba,Pacoti,Pacujá,Palhano,Palmácia,Paracuru,Paraipaba,Parambu,Paramoti,Pedra Branca,'+
+  'Penaforte,Pentecoste,Pereiro,Pindoretama,Piquet Carneiro,Pires Ferreira,Poranga,Porteiras,Potengi,'+
+  'Potiretama,Quiterianópolis,Quixadá,Quixelô,Quixeramobim,Quixeré,Redenção,Reriutaba,Russas,Saboeiro,'+
+  'Salitre,Santa Quitéria,Santana do Acaraú,Santana do Cariri,São Benedito,São Gonçalo do Amarante,'+
+  'São João do Jaguaribe,São Luís do Curu,Senador Pompeu,Senador Sá,Solonópole,Tabuleiro do Norte,'+
+  'Tamboril,Tarrafas,Tauá,Tejuçuoca,Tianguá,Trairi,Tururu,Ubajara,Umari,Umirim,Uruburetama,Uruoca,'+
+  'Varjota,Várzea Alegre,Viçosa do Ceará').split(',');
+  var ids = DATA.municipios.map(function(m){return m.name;});
+  todas.forEach(function(n){
+    if(ids.indexOf(n)<0){
+      DATA.municipios.push({
+        id:n.toLowerCase().replace(/[^a-z0-9]/g,''),name:n,
+        target:5,completed:0
+      });
+    }
+  });
+})();
 DATA.interviewers = [
   { id:1, nome:'Raimundo Tinoco', municipio:'Fortaleza', funcao:'Supervisor', pesquisas:0, concluidas:0, tempoMedio:'00:00', status:'Online', hoje:0, reg:'Grande Fortaleza', celular:'85996962828', senha:'2314' },
   { id:2, nome:'Jose Gerardo', municipio:'Fortaleza', funcao:'Supervisor', pesquisas:0, concluidas:0, tempoMedio:'00:00', status:'Online', hoje:0, reg:'Grande Fortaleza', celular:'85999149850', senha:'0102' }
@@ -3501,6 +3541,16 @@ function logoHeader() {
     '<div style="font-size:9px;color:#555;letter-spacing:1px;">INSTITUTO DE PESQUISA E INTELIGÊNCIA DE DADOS</div></div></div>';
 }
 
+function printBar(label, pctVal, color) {
+  var c = color || '#06b6d4';
+  return '<div style="margin-bottom:.35rem;"><div style="display:flex;justify-content:space-between;font-size:.72rem;font-weight:600;color:#333;margin-bottom:.15rem;"><span>' + label + '</span><span>' + pctVal + '%</span></div>' +
+    '<div style="height:14px;background:#e5e7eb;border-radius:7px;overflow:hidden;"><div style="height:100%;width:' + pctVal + '%;background:' + c + ';border-radius:7px;"></div></div></div>';
+}
+function printBarVotos(cand, v, totalV) {
+  var p = +((v/totalV)*100).toFixed(1);
+  return printBar(cand.name + ' ' + (cand.subname||''), p, cand.color);
+}
+
 function renderizarImpressao() {
   const total = totalConcluidas(), tv = totalVotos(), te = totalEspontanea();
   const progress = pct(total, DATA.metaGlobal);
@@ -3520,14 +3570,51 @@ function renderizarImpressao() {
     '<div style="text-align:center;padding:.5rem;border:1px solid #ddd;border-radius:4px;"><div style="font-size:.65rem;color:#888;">Meta</div><div style="font-size:1.2rem;font-weight:800;color:#111;">' + DATA.metaGlobal + '</div></div></div>' +
     '<div style="font-size:.75rem;color:#888;">Gerado em: ' + new Date().toLocaleString('pt-BR') + '</div>' + rodape;
 
-  // Gráficos
+  // Gráficos com barras visuais
   document.getElementById('impressao-sub-graficos').innerHTML = cabecalho +
-    '<div style="margin-bottom:.75rem;"><div style="font-size:.85rem;font-weight:700;margin-bottom:.5rem;border-bottom:1px solid #ddd;padding-bottom:.25rem;">Intenção de Voto</div>' +
-    DATA.candidates.map(c=>{const p=pct(c.votos,tv);return '<div style="display:flex;justify-content:space-between;padding:.15rem 0;font-size:.78rem;border-bottom:1px dotted #eee;"><span>' + c.name + '</span><strong>' + p + '%</strong></div>';}).join('') + '</div>' +
+    '<div style="margin-bottom:.75rem;"><div style="font-size:.85rem;font-weight:700;margin-bottom:.5rem;border-bottom:1px solid #ddd;padding-bottom:.25rem;">Intenção de Voto Estimulada</div>' +
+    DATA.candidates.map(function(c){return printBarVotos(c, c.votos, tv);}).join('') + '</div>' +
+    '<div style="margin-bottom:.75rem;"><div style="font-size:.85rem;font-weight:700;margin-bottom:.5rem;border-bottom:1px solid #ddd;padding-bottom:.25rem;">Intenção de Voto Espontânea</div>' +
+    DATA.espontanea.map(function(c){var p=pct(c.votos,te);return printBar(c.name, p, '#f59e0b');}).join('') + '</div>' +
     '<div style="margin-bottom:.75rem;"><div style="font-size:.85rem;font-weight:700;margin-bottom:.5rem;border-bottom:1px solid #ddd;padding-bottom:.25rem;">Rejeição</div>' +
-    DATA.rejection.map(r=>'<div style="display:flex;justify-content:space-between;padding:.15rem 0;font-size:.78rem;border-bottom:1px dotted #eee;"><span>' + r.name + '</span><strong style="color:#ef4444;">' + r.value + '%</strong></div>').join('') + '</div>' +
-    '<div style="margin-bottom:.75rem;"><div style="font-size:.85rem;font-weight:700;margin-bottom:.5rem;border-bottom:1px solid #ddd;padding-bottom:.25rem;">Espontânea</div>' +
-    DATA.espontanea.map(c=>{const p=pct(c.votos,te);return '<div style="display:flex;justify-content:space-between;padding:.15rem 0;font-size:.78rem;border-bottom:1px dotted #eee;"><span>' + c.name + '</span><strong>' + p + '%</strong></div>';}).join('') + '</div>' + rodape;
+    DATA.rejection.map(function(r){return printBar(r.name, r.value, '#ef4444');}).join('') + '</div>' +
+    '<div style="margin-bottom:.75rem;"><div style="font-size:.85rem;font-weight:700;margin-bottom:.5rem;border-bottom:1px solid #ddd;padding-bottom:.25rem;">Aprovação Administrativa</div>' +
+    DATA.aprovacao.map(function(a){
+      var ac = a.label==='Ótima'?'#06b6d4':a.label==='Boa'?'#22c55e':a.label==='Regular'?'#eab308':a.label==='Ruim'?'#f97316':'#ef4444';
+      return printBar(a.label, a.pct, ac);
+    }).join('') + '</div>' + rodape;
+
+  // Cruzamentos
+  document.getElementById('impressao-sub-cruzamentos').innerHTML = cabecalho +
+    '<div style="margin-bottom:.75rem;"><div style="font-size:.85rem;font-weight:700;margin-bottom:.5rem;border-bottom:1px solid #ddd;padding-bottom:.25rem;">Por Gênero</div>' +
+    printBar('Masculino', 48, '#06b6d4') + printBar('Feminino', 52, '#ec4899') + '</div>' +
+    '<div style="margin-bottom:.75rem;"><div style="font-size:.85rem;font-weight:700;margin-bottom:.5rem;border-bottom:1px solid #ddd;padding-bottom:.25rem;">Por Faixa Etária</div>' +
+    DATA.demographics.etaria.map(function(d){return printBar(d.label, d.pct, '#c084fc');}).join('') + '</div>' +
+    '<div style="margin-bottom:.75rem;"><div style="font-size:.85rem;font-weight:700;margin-bottom:.5rem;border-bottom:1px solid #ddd;padding-bottom:.25rem;">Por Escolaridade</div>' +
+    DATA.demographics.instrucao.map(function(d){return printBar(d.label, d.pct, '#8b5cf6');}).join('') + '</div>' +
+    '<div style="margin-bottom:.75rem;"><div style="font-size:.85rem;font-weight:700;margin-bottom:.5rem;border-bottom:1px solid #ddd;padding-bottom:.25rem;">Por Renda Familiar</div>' +
+    DATA.demographics.renda.map(function(d){return printBar(d.label, d.pct, '#10b981');}).join('') + '</div>' +
+    '<div style="margin-bottom:.75rem;"><div style="font-size:.85rem;font-weight:700;margin-bottom:.5rem;border-bottom:1px solid #ddd;padding-bottom:.25rem;">Cruzamento: Candidato × Perfil Demográfico</div>' +
+    '<table style="width:100%;border-collapse:collapse;font-size:.7rem;">' +
+    '<thead><tr><th style="padding:.25rem .3rem;text-align:left;border-bottom:2px solid #222;">Perfil</th>' +
+    '<th style="padding:.25rem .3rem;text-align:right;border-bottom:2px solid #222;">Cand.A</th>' +
+    '<th style="padding:.25rem .3rem;text-align:right;border-bottom:2px solid #222;">Cand.B</th>' +
+    '<th style="padding:.25rem .3rem;text-align:right;border-bottom:2px solid #222;">Cand.C</th>' +
+    '<th style="padding:.25rem .3rem;text-align:right;border-bottom:2px solid #222;">B/N</th>' +
+    '<th style="padding:.25rem .3rem;text-align:right;border-bottom:2px solid #222;">Ind.</th></tr></thead><tbody>' +
+    DATA.dadosCruzados.map(function(r){
+      return '<tr><td style="padding:.2rem .3rem;border-bottom:1px solid #ddd;font-weight:600;">' + r.perfil + '</td>' +
+        '<td style="padding:.2rem .3rem;border-bottom:1px solid #ddd;text-align:right;">' + r.A + '%</td>' +
+        '<td style="padding:.2rem .3rem;border-bottom:1px solid #ddd;text-align:right;">' + r.B + '%</td>' +
+        '<td style="padding:.2rem .3rem;border-bottom:1px solid #ddd;text-align:right;">' + r.C + '%</td>' +
+        '<td style="padding:.2rem .3rem;border-bottom:1px solid #ddd;text-align:right;">' + r.N + '%</td>' +
+        '<td style="padding:.2rem .3rem;border-bottom:1px solid #ddd;text-align:right;">' + r.I + '%</td></tr>';
+    }).join('') + '</tbody></table></div>' +
+    '<div style="margin-bottom:.75rem;"><div style="font-size:.85rem;font-weight:700;margin-bottom:.5rem;border-bottom:1px solid #ddd;padding-bottom:.25rem;">Top 10 Municípios</div>' +
+    DATA.municipios.sort(function(a,b){return b.completed-a.completed;}).slice(0,10).map(function(m){
+      var p = m.target>0 ? pct(m.completed,m.target) : 0;
+      return printBar(m.name, Math.round(p), '#0ea5e9');
+    }).join('') + '</div>' + rodape;
 
   // Tabelas
   const tabStyle = 'width:100%;border-collapse:collapse;font-size:.75rem;';
