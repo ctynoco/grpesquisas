@@ -1,0 +1,173 @@
+<div class="aba-painel active" id="painel-dashboard">
+
+          <!-- KPIs -->
+          <div class="grade-kpi" id="gradeKpi">
+            <div class="cartao-kpi" id="kpi-total">
+              <div class="topo-kpi">
+                <span class="rotulo-kpi">Pesquisas Concluídas</span>
+                <div class="icone-kpi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+              </div>
+              <div class="valor-kpi" id="kv-total">0</div>
+              <div class="sub-kpi">Meta: <strong id="kpi-meta">2.500</strong> entrevistas</div>
+              <div class="progresso-kpi"><div class="trilha-progresso"><div class="preenchimento-progresso" id="kpi-prog" style="width:0%"></div></div></div>
+            </div>
+
+            <div class="cartao-kpi" id="kpi-hoje">
+              <div class="topo-kpi">
+                <span class="rotulo-kpi">Hoje</span>
+                <div class="icone-kpi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+              </div>
+              <div class="valor-kpi" id="kv-hoje">0</div>
+              <div class="sub-kpi">Sincronizadas nas últimas 24h</div>
+            </div>
+
+            <div class="cartao-kpi" id="kpi-margem">
+              <div class="topo-kpi">
+                <span class="rotulo-kpi">Margem de Erro</span>
+                <div class="icone-kpi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg></div>
+              </div>
+              <div class="valor-kpi" id="kv-margem">2,0%</div>
+              <div class="sub-kpi">Intervalo de Confiança: 95%</div>
+            </div>
+
+            <div class="cartao-kpi" id="kpi-andamento">
+              <div class="topo-kpi">
+                <span class="rotulo-kpi">Em Andamento</span>
+                <div class="icone-kpi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></div>
+              </div>
+              <div class="valor-kpi" id="kv-andamento">0</div>
+              <div class="sub-kpi">Entrevistas iniciadas agora</div>
+            </div>
+
+            <div class="cartao-kpi" id="kpi-municipios">
+              <div class="topo-kpi">
+                <span class="rotulo-kpi">Municípios Cobertos</span>
+                <div class="icone-kpi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 0 0-8 8c0 5.25 8 14 8 14s8-8.75 8-14a8 8 0 0 0-8-8z"/></svg></div>
+              </div>
+              <div class="valor-kpi" id="kv-municipios">15</div>
+              <div class="sub-kpi">Municípios polo do Ceará</div>
+            </div>
+
+            <div class="cartao-kpi" id="kpi-ativos">
+              <div class="topo-kpi">
+                <span class="rotulo-kpi">Entrevistadores Online</span>
+                <div class="icone-kpi"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/></svg></div>
+              </div>
+              <div class="valor-kpi" id="kv-ativos">0</div>
+              <div class="sub-kpi">Ativos em campo agora</div>
+            </div>
+          </div>
+
+          <!-- Charts Row -->
+          <div class="grade-3 grade-larga">
+            <div class="cartao">
+              <div class="cabecalho-cartao">
+                <div class="titulo-cartao">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+                  Intenção de Voto — Estimulada
+                </div>
+                <span class="badge badge-cyan">Geral Ceará</span>
+              </div>
+              <div class="grafico-barra" id="chart-votos-estimulada"></div>
+            </div>
+
+            <div class="cartao">
+              <div class="cabecalho-cartao">
+                <div class="titulo-cartao">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+                  Intenção de Voto — Espontânea
+                </div>
+                <span class="badge badge-purple">Espontânea</span>
+              </div>
+              <div class="grafico-barra" id="chart-votos-espontanea"></div>
+            </div>
+
+            <div class="cartao">
+              <div class="cabecalho-cartao">
+                <div class="titulo-cartao">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/></svg>
+                  Índice de Rejeição
+                </div>
+                <span class="badge badge-red">Múltipla</span>
+              </div>
+              <div class="grafico-barra" id="chart-rejeicao"></div>
+            </div>
+          </div>
+
+          <!-- Evolution + Feed + Ficha -->
+          <div class="grade-2">
+            <div class="cartao">
+              <div class="cabecalho-cartao">
+                <div class="titulo-cartao">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+                  Evolução Diária da Coleta
+                </div>
+                <span class="badge">Últimos 7 dias</span>
+              </div>
+              <div class="envoltorio-grafico-linha">
+                <svg id="graficoLinha" viewBox="0 0 500 160" preserveAspectRatio="none" style="width:100%;height:160px;overflow:visible;"></svg>
+              </div>
+            </div>
+
+            <div class="cartao">
+              <div class="cabecalho-cartao">
+                <div class="titulo-cartao">
+                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                  Monitor de Transmissão ao Vivo
+                </div>
+                <span class="badge badge-green">Ao Vivo</span>
+              </div>
+              <div class="lista-log" id="dash-live-logs"></div>
+            </div>
+          </div>
+
+          <!-- Ficha Técnica -->
+          <div class="cartao">
+            <div class="cabecalho-cartao">
+              <div class="titulo-cartao">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+                Ficha Técnica do Levantamento
+              </div>
+              <span class="badge badge-yellow">GERARDO 2026</span>
+            </div>
+            <div class="grade-ficha">
+              <div class="linha-ficha"><span class="chave-ficha">Área de Abrangência:</span><span>Todo o Estado do Ceará, com 184 municípios, dividido em 7 macrorregiões de planejamento (IPECE).</span></div>
+              <div class="linha-ficha"><span class="chave-ficha">Público-Alvo:</span><span>Eleitores com 16 anos ou mais, devidamente registrados nas zonas eleitorais do Ceará.</span></div>
+              <div class="linha-ficha"><span class="chave-ficha">Metodologia:</span><span>Pesquisa quantitativa por amostragem probabilística sistemática, com cotas por gênero, faixa etária e grau de instrução.</span></div>
+              <div class="linha-ficha"><span class="chave-ficha">Tipo de Entrevista:</span><span>Presencial (CAPI — Computer Assisted Personal Interviewing), com gravação de voz e georreferenciamento GPS.</span></div>
+              <div class="linha-ficha"><span class="chave-ficha">Auditoria:</span><span>20% da amostra auditada por gravação de voz, checagem de GPS e análise de tempo mínimo de aplicação.</span></div>
+              <div class="linha-ficha"><span class="chave-ficha">Nível de Confiança:</span><span>95% (Z = 1,96), margem de erro máxima de ±2,0 pontos percentuais para a amostra total.</span></div>
+              <div class="linha-ficha"><span class="chave-ficha">Período de Campo:</span><span>13 a 15 de junho de 2026.</span></div>
+            </div>
+          </div>
+
+          <!-- Municipios -->
+
+          <div class="cartao">
+            <div class="cabecalho-cartao">
+              <div class="titulo-cartao">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg>
+                Cobertura por Município
+              </div>
+              <span class="badge">Ranking</span>
+            </div>
+            <div id="municipio-general-list"></div>
+          </div>
+
+          <!-- Bairros -->
+
+          <div class="cartao">
+            <div class="cabecalho-cartao">
+              <div class="titulo-cartao">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+                Detalhamento por Bairro
+              </div>
+              <span class="badge badge-cyan" id="bairro-status-badge">0/0 bairros</span>
+            </div>
+            <div id="bairro-list"></div>
+            <div style="margin-top:.75rem;font-size:.82rem;color:var(--text-2);line-height:1.7;" id="bairro-summary"></div>
+          </div>
+        </div>
+
+        <!-- ========== COBERTURA ========== -->
+        
